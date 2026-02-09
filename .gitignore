@@ -1,0 +1,16 @@
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore large model weights
+*.pt
+*.pth
+
+# Ignore datasets
+dataset/
+trash_ICRA19/
+instances_train.json
+
+# Ignore environment files
+venv/
+.env
