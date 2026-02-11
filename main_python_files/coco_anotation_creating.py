@@ -86,17 +86,3 @@ output_filename = "instances_train.json"
 
 if __name__ == "__main__":
     convert_to_coco(xml_input_folder, output_filename)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
