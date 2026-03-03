@@ -81,8 +81,8 @@ def convert_to_coco(xml_folder, output_json):
 
 # --- 🚀 RUN CONVERSION ---
 # This uses your specific local project paths
-xml_input_folder = r"D:\4th year\fyp\AquaClean_Project\trash_ICRA19\trash_ICRA19\dataset\train"
-output_filename = "instances_train.json"
+xml_input_folder = r"D:\4th year\fyp\trash_ICRA19\trash_ICRA19\dataset\val"
+output_filename = "instances_val.json"
 
 if __name__ == "__main__":
     convert_to_coco(xml_input_folder, output_filename)

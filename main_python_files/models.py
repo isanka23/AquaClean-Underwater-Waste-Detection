@@ -9,12 +9,15 @@ class DCENet(nn.Module):
         super(DCENet, self).__init__()
         self.conv1 = nn.Conv2d(3, 32, 3, 1, 1)
         self.conv2 = nn.Conv2d(32, 32, 3, 1, 1)
-        self.conv3 = nn.Conv2d(32, 3, 3, 1, 1)
+        self.conv3 = nn.Conv2d(32, 32, 3, 1, 1) 
+        self.conv4 = nn.Conv2d(32, 3, 3, 1, 1) 
 
     def forward(self, x):
         x1 = F.relu(self.conv1(x))
         x2 = F.relu(self.conv2(x1))
-        A = torch.tanh(self.conv3(x2))
+        x3 = F.relu(self.conv3(x2)) 
+        A = torch.tanh(self.conv4(x3))
+        
         enhanced = x + A * x * (1 - x)
         return enhanced, A
 

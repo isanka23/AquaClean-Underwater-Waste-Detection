@@ -26,7 +26,8 @@ class AquaCleanGUI(ctk.CTk):
         # Load Model
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model = JointModel().to(self.device)
-        weights_path = "../epoch_files/joint_model_epoch_60.pt"
+        #weights_path = "../epoch_files/joint_model_epoch_60.pt"
+        weights_path = r"D:\4th year\fyp\AquaClean_Project\main_python_files\joint_model_epoch_60.pt"
         
         try:
             self.model.load_state_dict(torch.load(weights_path, map_location=self.device))
