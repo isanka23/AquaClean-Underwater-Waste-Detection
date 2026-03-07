@@ -1,0 +1,3 @@
+{
+  "python.analysis.extraPaths": ["./main_python_files/image_enhan"]
+}

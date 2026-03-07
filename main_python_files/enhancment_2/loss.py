@@ -17,8 +17,11 @@ class GANLoss(nn.Module):
         adv_loss = self.adversarial_loss(pred_fake, torch.ones_like(pred_fake))
         # Pixel-wise Content component
         l1 = torch.mean(torch.abs(fake - real))
-        # Perceptual Style component
-        percep = torch.mean((self.vgg(fake) - self.vgg(real))**2)
+        
+        # --- NEW: Shift from [-1, 1] to [0, 1] for VGG ---
+        fake_vgg = (fake + 1.0) / 2.0
+        real_vgg = (real + 1.0) / 2.0
+        percep = torch.mean((self.vgg(fake_vgg) - self.vgg(real_vgg))**2)
         
         return adv_loss + (10 * l1) + (1.0 * percep)
 
@@ -26,3 +29,10 @@ class GANLoss(nn.Module):
         loss_real = self.adversarial_loss(pred_real, torch.ones_like(pred_real))
         loss_fake = self.adversarial_loss(pred_fake, torch.zeros_like(pred_fake))
         return (loss_real + loss_fake) * 0.5
+        
+
+# L1 (Pixel-wise loss) → correcting color & brightness 
+
+# Perceptual → Protecting textures & details (like fish scales, water ripples)
+
+# Adversarial → creating realistic enhancements output
