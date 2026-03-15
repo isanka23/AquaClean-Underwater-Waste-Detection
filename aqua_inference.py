@@ -22,11 +22,11 @@ except ImportError:
 # =================CONFIGURATION=================
 GAN_WEIGHTS_PATH = r'D:\4th year\fyp\AquaClean_Project\main_python_files\enhancment_2\results_gan\attention_gan_epoch_100.pth'
 DETR_WEIGHTS_PATH = r'D:\4th year\fyp\AquaClean_Project\object_detecion\detr_trash_model_epoch_50.pth'
-INPUT_IMAGE_PATH = r'D:\4th year\fyp\AquaClean_Project\test_images\nm_405up.jpg'
+INPUT_IMAGE_PATH = r'D:\4th year\fyp\AquaClean_Project\test_images\nm_358up.jpg'
 
 IMAGE_SIZE = 256
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-CONFIDENCE_THRESHOLD = 0.80
+CONFIDENCE_THRESHOLD = 0.60
 
 id2label = {0: 'plastic', 1: 'bio', 2: 'rov'} 
 label2id = {v: k for k, v in id2label.items()}
