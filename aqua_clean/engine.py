@@ -118,8 +118,6 @@
 #         return original_pil, result_pil, metrics
 
 
-
-
 import sys
 import time
 import torch
@@ -151,7 +149,20 @@ class InferenceEngine:
             print("[INFO] Loading GAN Enhancement Model...")
             # 1. Load GAN
             self.gen = UNetGenerator().to(self.device)
-            self.gen.load_state_dict(torch.load(config.GAN_WEIGHTS_PATH, map_location=self.device))
+            
+            # --- THE SMART LOADER FIX FOR GAN ---
+            gan_checkpoint = torch.load(config.GAN_WEIGHTS_PATH, map_location=self.device)
+            
+            # Check if it's our new dictionary format from cloud training
+            if 'gen_state' in gan_checkpoint:
+                self.gen.load_state_dict(gan_checkpoint['gen_state'])
+                saved_epoch = gan_checkpoint.get('epoch', 'Unknown')
+                print(f"[+] Loaded GAN dictionary model from Epoch {saved_epoch}")
+            else:
+                # Fallback for old raw weight files
+                self.gen.load_state_dict(gan_checkpoint)
+                print("[+] Loaded GAN model weights directly.")
+                
             self.gen.eval()
             print("[INFO] GAN Loaded Successfully.")
 
@@ -169,7 +180,7 @@ class InferenceEngine:
             print(f"[INFO] Fetching weights from: {config.DETR_WEIGHTS_PATH}")
             checkpoint = torch.load(config.DETR_WEIGHTS_PATH, map_location=self.device)
             
-            # --- THE SMART LOADER FIX ---
+            # --- THE SMART LOADER FIX FOR DETR ---
             if 'model_state_dict' in checkpoint:
                 self.detr_model.load_state_dict(checkpoint['model_state_dict'])
                 saved_epoch = checkpoint.get('epoch', 'Unknown')
