@@ -1,0 +1,18 @@
+{
+    "images": [],
+    "annotations": [],
+    "categories": [
+        {
+            "id": 0,
+            "name": "plastic"
+        },
+        {
+            "id": 1,
+            "name": "bio"
+        },
+        {
+            "id": 2,
+            "name": "rov"
+        }
+    ]
+}

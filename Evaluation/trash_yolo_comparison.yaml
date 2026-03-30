@@ -1,0 +1,10 @@
+
+path: D:/4th year/fyp/under water waste detection/trash_ICRA19/trash_ICRA19/dataset
+train: train
+val: val
+test: test
+
+names:
+  0: plastic
+  1: bio
+  2: rov
