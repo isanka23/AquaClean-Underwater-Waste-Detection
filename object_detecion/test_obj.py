@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 MODEL_PATH = r"D:\4th year\fyp\AquaClean_Project\object_detecion\test_weights\detr_best++.pth"
 IMAGE_PATH = r"D:\4th year\fyp\AquaClean_Project\test_images\nm_321up.jpg"
-CONFIDENCE_THRESHOLD = 0.3  # මීට වඩා වැඩි ඒව විතරක් පෙන්වයි
+CONFIDENCE_THRESHOLD = 0.3  
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -20,10 +20,10 @@ model = DetrForObjectDetection.from_pretrained(
     ignore_mismatched_sizes=True
 ).to(device)
 
-# පහුගිය training එකේ weights load කිරීම
+
 if os.path.exists(MODEL_PATH):
     checkpoint = torch.load(MODEL_PATH, map_location=device)
-    # සමහරවිට checkpoint එකේ තියෙන්නේ 'model_state_dict' නමින් විය හැක
+
     state_dict = checkpoint['model_state_dict'] if 'model_state_dict' in checkpoint else checkpoint
     model.load_state_dict(state_dict)
     model.eval()
@@ -39,13 +39,13 @@ def run_detection(img_path, threshold):
     with torch.no_grad():
         outputs = model(**inputs)
 
-    # පින්තූරයේ ප්‍රමාණයට අදාළව boxes සකස් කිරීම
+
     target_sizes = torch.tensor([image.size[::-1]])
     results = processor.post_process_object_detection(outputs, target_sizes=target_sizes, threshold=threshold)[0]
 
     draw = ImageDraw.Draw(image)
     
-    # පන්ති අනුව වර්ණ (Colors)
+
     colors = {"plastic": "red", "rov": "blue", "bio": "green"}
 
     print(f"🔍 Found {len(results['scores'])} objects:")
@@ -54,7 +54,7 @@ def run_detection(img_path, threshold):
         box = [round(i, 2) for i in box.tolist()]
         label_name = model.config.id2label[label.item()]
         
-        # පින්තූරය මත ඇඳීම
+  
         draw.rectangle(box, outline=colors.get(label_name, "white"), width=4)
         draw.text((box[0], box[1]), f"{label_name}: {score:.2f}", fill="white")
         

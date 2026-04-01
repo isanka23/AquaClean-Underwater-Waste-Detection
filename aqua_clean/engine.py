@@ -121,11 +121,18 @@ class InferenceEngine:
                 outputs, target_sizes=target_sizes, threshold=config.CONFIDENCE_THRESHOLD
             )[0]
 
-            # --- STAGE 3: DRAWING BOXES ---
+            # --- STAGE 3: POST-PROCESSING & DRAWING BOXES ---
             image_np = np.array(enhanced_pil).copy()
             detected_classes = set()
             count = 0
             total_score = 0.0 # Track score for accuracy calculation
+            
+            # 1. Calculate dynamic scaling factors based on image dimensions
+            dynamic_scale = max(orig_w, orig_h) / 1000.0
+            font_scale = max(0.5, dynamic_scale)  # Set a minimum font size
+            text_thickness = max(2, int(font_scale * 2))
+            bg_thickness = text_thickness + 2
+            box_thickness = max(2, int(dynamic_scale * 3))
             
             for score, label, box in zip(results["scores"], results["labels"], results["boxes"]):
                 if score > config.CONFIDENCE_THRESHOLD:
@@ -138,9 +145,14 @@ class InferenceEngine:
                     box = [int(i) for i in box.tolist()]
                     label_text = f"{cls_name}: {round(score.item(), 2)}"
                     
-                    cv2.rectangle(image_np, (box[0], box[1]), (box[2], box[3]), box_color, 3)
-                    cv2.putText(image_np, label_text, (box[0], box[1] - 8), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 4)
-                    cv2.putText(image_np, label_text, (box[0], box[1] - 8), cv2.FONT_HERSHEY_SIMPLEX, 0.7, config.TEXT_COLOR, 2)
+                    # 2. Draw the bounding box with dynamic thickness
+                    cv2.rectangle(image_np, (box[0], box[1]), (box[2], box[3]), box_color, box_thickness)
+                    
+                    # 3. Draw text outline (black) with dynamic scale and thickness
+                    cv2.putText(image_np, label_text, (box[0], box[1] - 8), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 0, 0), bg_thickness)
+                    
+                    # 4. Draw actual text (white) with dynamic scale and thickness
+                    cv2.putText(image_np, label_text, (box[0], box[1] - 8), cv2.FONT_HERSHEY_SIMPLEX, font_scale, config.TEXT_COLOR, text_thickness)
 
             result_pil = Image.fromarray(image_np)
             total_time = time.time() - start_time
