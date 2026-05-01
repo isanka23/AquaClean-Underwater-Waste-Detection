@@ -22,7 +22,6 @@ EPOCHS = 100
 LEARNING_RATE = 1e-4
 PATIENCE = 20
 
-# නිවැරදි Paths ලබා දීම
 TRAIN_IMG_DIR = "/content/dataset_root"
 TRAIN_ANN_FILE = "/content/drive/MyDrive/dataset_combine_train/final_train_with_rov_boost.json"
 VAL_IMG_DIR = "/content/dataset_root"
@@ -54,16 +53,13 @@ print("📊 Loading datasets...")
 train_dataset = CocoDetection(TRAIN_IMG_DIR, TRAIN_ANN_FILE)
 val_dataset = CocoDetection(VAL_IMG_DIR, VAL_ANN_FILE)
 
-# --- FLATTENING FIX: පින්තූරවල පාරවල් (Paths) නිවැරදි කිරීම ---
 def fix_filenames(dataset):
     for img_id in dataset.coco.imgs:
-        # පින්තූරයේ නමේ ඇති folder path එක ඉවත් කර පින්තූරයේ නම පමණක් ගනී
         original_name = dataset.coco.imgs[img_id]['file_name']
         dataset.coco.imgs[img_id]['file_name'] = os.path.basename(original_name)
 
 fix_filenames(train_dataset)
 fix_filenames(val_dataset)
-print("✅ පින්තූර පාරවල් (Paths) නිවැරදිව සකසන ලදී!")
 
 train_dataloader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True, collate_fn=collate_fn, num_workers=12, pin_memory=True)
 val_dataloader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False, collate_fn=collate_fn, num_workers=12, pin_memory=True)

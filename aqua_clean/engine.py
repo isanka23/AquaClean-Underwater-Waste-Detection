@@ -22,6 +22,7 @@ except ImportError as e:
 class InferenceEngine:
     def __init__(self):
         self.device = config.DEVICE
+        # loads the GAN and DETR models.
         self.load_models()
 
     def load_models(self):
