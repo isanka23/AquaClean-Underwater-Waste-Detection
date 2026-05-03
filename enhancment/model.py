@@ -5,9 +5,6 @@ import torch.nn as nn
 # ==========================================================
 # CBAM ATTENTION MODULE
 # This module helps the generator focus on important features.
-# It has two parts:
-# 1. Channel Attention - focuses on "what" features are important.
-# 2. Spatial Attention - focuses on "where" important regions are.
 # ==========================================================
 
 class ChannelAttention(nn.Module):
